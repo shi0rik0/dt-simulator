@@ -8,10 +8,10 @@ interface Queue {
 }
 
 // 常量
-const bufferSize = 40
+const bufferSize = 20
 const numQueues = 4
 const maxFlowRate = 4
-const flowRateStep = 0.1
+const flowRateStep = 0.01
 
 const alpha = ref(1)
 
@@ -71,20 +71,20 @@ onUnmounted(() => {
 </script>
 
 <template>
-<div class="p-4 bg-white rounded-xl shadow-lg flex flex-col items-center justify-center space-y-4">
-  <p>欢迎使用DT模拟器</p>
-  <div v-for="i in queueInfos">
+<div class="px-8 py-4 bg-white rounded-xl shadow-lg flex flex-col items-center justify-center space-y-4">
+  <p >Dynamic Threshold Simulator</p>
+  <div class="space-x-4">
+    <input type="range" min="1" max="6" step="0.1" v-model.number="alpha">
+    <span>α = {{ alpha.toFixed(1) }}</span>
+  </div>
+  <div v-for="i in queueInfos" class="space-x-4">
     <progress class="with-threshold" :style="thresholdPosition" :value="bufferSize - i.length" :max="bufferSize" />
     <input type="range" min="0" :max="maxFlowRate" :step="flowRateStep" v-model.number="i.flowRate">
-    <span>流速：{{ i.flowRate.toFixed(2) }}</span>
+    <span>Rate = {{ i.flowRate.toFixed(2) }}</span>
   </div>
   <progress :value="bufferSize - totalSize" :max="bufferSize" />
   <div>
-    <button class="p-2 bg-blue-300 rounded-xl shadow-lg" @click="running = !running">{{ running ? '暂停' : '开始' }}</button>
-  </div>
-  <div>
-    <input type="range" min="1" max="6" step="0.1" v-model.number="alpha">
-    <span>alpha = {{ alpha.toFixed(1) }}</span>
+    <button class="p-2 bg-blue-300 rounded-xl shadow-lg w-20" @click="running = !running">{{ running ? 'Pause' : 'Resume' }}</button>
   </div>
 </div>
 </template>
